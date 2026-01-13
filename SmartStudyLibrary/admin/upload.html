@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Smart Bulk Upload</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    body{background:#f7f9fc;display:flex;justify-content:center;align-items:center;min-height:100vh;}
+    form{background:#fff;padding:2rem 3rem;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.08);width:100%;max-width:440px;}
+    h2{margin-bottom:1.2rem;text-align:center;}
+    label{display:block;margin-top:1rem;font-weight:600;}
+    input[type=text],select{width:100%;padding:.6rem;margin-top:.3rem;border:1px solid #ccc;border-radius:6px;}
+    input[type=file]{margin-top:.5rem}
+    input[type=checkbox]{margin-right:6px;}
+    button{margin-top:1.5rem;width:100%;padding:.7rem;background:#2b73ff;color:#fff;border:none;border-radius:6px;font-size:1rem;cursor:pointer;}
+    button:hover{opacity:.95;}
+    #progress{margin-top:1rem;font-size:.9rem;}
+  </style>
+</head>
+<body>
+<form id="uploadForm">
+  <h2>📚 Smart Bulk Upload</h2>
+
+  <label>
+    <input type="checkbox" id="manualMode"> File name सही नहीं है (Manual Mode)
+  </label>
+
+  <label>Drag & Drop or Select Multiple Books</label>
+  <input type="file" id="bulkFiles" multiple accept="image/*,application/pdf" required>
+
+  <label>Class</label>
+  <select id="class" required disabled>
+    <option value="">-- Auto --</option>
+    <option value="preschool">Pre-School</option>
+    <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
+    <option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
+    <option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option>
+    <option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option>
+  </select>
+
+  <label>Subject</label>
+  <select id="subject" required disabled>
+    <option value="">-- Auto --</option>
+  </select>
+
+  <label>Board / Category</label>
+  <select id="board" required>
+    <option value="NCERT">NCERT</option>
+    <option value="CBSE">CBSE</option>
+    <option value="ICSE">ICSE</option>
+    <option value="UP Board">UP Board</option>
+    <option value="Bihar Board">Bihar Board</option>
+    <option value="Comics">Comics</option>
+    <option value="Story Books">Story Books</option>
+    <option value="GK & Competitive">GK & Competitive</option>
+  </select>
+
+  <button type="submit">Upload All</button>
+  <div id="progress"></div>
+</form>
+
+<script src="upload.js"></script>
+</body>
+</html>

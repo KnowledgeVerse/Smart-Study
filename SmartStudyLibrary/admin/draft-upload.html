@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Draft Upload – Admin</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e62d0;
+      --secondary: #009b9d;
+      --glass: rgba(255, 255, 255, 0.15);
+      --blur: blur(12px);
+      --radius: 12px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e62d0, #009b9d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .glass-box {
+      background: var(--glass);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius);
+      padding: 2.5rem 3rem;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      color: #fff;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      text-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+    }
+    label {
+      font-weight: 600;
+      margin-top: 1rem;
+      display: block;
+    }
+    input[type=file] {
+      margin-top: 0.5rem;
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    input::file-selector-button {
+      background: var(--secondary);
+      color: #fff;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 0.5rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.7rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 12px rgba(30, 98, 208, 0.5);
+    }
+    button:hover {
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.7);
+      transform: translateY(-2px);
+    }
+    #progress {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      min-height: 1.2rem;
+    }
+    .error-box {
+      background: rgba(231, 76, 60, 0.2);
+      border: 1px solid rgba(231, 76, 60, 0.5);
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      display: none;
+    }
+    @media (max-width: 480px) {
+      .glass-box {
+        padding: 1.5rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="glass-box" id="uploadBox">
+  <h2><i class='bx bx-folder-open'></i> Draft Upload Admin</h2>
+  <label>Drag & Drop or Select Multiple Books</label>
+  <input type="file" id="draftFiles" multiple accept="image/*,application/pdf" required>
+  <button id="uploadDraftBtn">Upload to Draft</button>
+  <div id="progress"></div>
+  <div id="errorBox" class="error-box"></div>
+</div>
+
+<script>
+  const isAdmin = localStorage.getItem('isSignedIn') === 'true';
+  if (!isAdmin) {
+    document.body.innerHTML = `
+      <div class="glass-box">
+        <h2>🚫 Access Denied</h2>
+        <p>Only logged-in admins can upload drafts.</p>
+        <button onclick="window.close()">Close</button>
+        <button onclick="window.location='/'">Go to Home</button>
+      </div>`;
+    throw new Error('Not admin');
+  }
+
+  const filesInput = document.getElementById('draftFiles');
+  const progress = document.getElementById('progress');
+  const errorBox = document.getElementById('errorBox');
+  const uploadBox = document.getElementById('uploadBox');
+
+  // Drag & Drop
+  uploadBox.addEventListener('dragover', e => {
+    e.preventDefault();
+    uploadBox.style.border = '2px dashed #00ffcc';
+  });
+  uploadBox.addEventListener('dragleave', () => {
+    uploadBox.style.border = '1px solid rgba(255,255,255,0.2)';
+  });
+  uploadBox.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadBox.style.border = '1px solid rgba(255,255,255,0.2)';
+    filesInput.files = e.dataTransfer.files;
+  });
+
+  document.getElementById('uploadDraftBtn').onclick = async () => {
+    const files = filesInput.files;
+    if (!files.length) return alert('No files selected');
+    const images = [...files].filter(f => f.type.startsWith('image/'));
+    const pdfs = [...files].filter(f => f.type === 'application/pdf');
+    if (images.length !== pdfs.length) return alert('1 cover + 1 PDF per book required');
+
+    progress.innerHTML = 'Uploading...';
+    errorBox.style.display = 'none';
+    let uploaded = 0;
+    for (let i = 0; i < pdfs.length; i++) {
+      const formData = new FormData();
+      formData.append('cover', images[i]);
+      formData.append('pdf', pdfs[i]);
+      try {
+        const res = await fetch('http://localhost:3000/admin/draft-upload', {
+          method: 'POST',
+          body: formData,
+          headers: { 'x-auth-token': 'admin-token-007' }
+        });
+        const result = await res.json();
+        if (result.success) uploaded++;
+        progress.innerHTML = `Uploaded ${uploaded}/${pdfs.length}`;
+      } catch (err) {
+        errorBox.textContent = `Upload failed: ${err.message}`;
+        errorBox.style.display = 'block';
+      }
+    }
+    progress.innerHTML += '<br>✅ Drafts created!';
+    filesInput.value = '';
+    window.opener?.loadDrafts?.();
+  };
+</script>
+
+</body>
+</html>

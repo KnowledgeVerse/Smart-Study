@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Study Library</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+</head>
+
+<!-- Glass Sign-In Modal -->
+<div id="loginModal" class="login-modal">
+  <div class="login-box">
+    <h2>Sign In</h2>
+<form id="loginForm">
+  <input type="text" id="loginUser" placeholder="Username" required />
+  <div style="position:relative;">
+    <input type="password" id="loginPass" placeholder="Password" required />
+    <i class='bx bx-show-alt show-pass' id="togglePass" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:#ccc;"></i>
+  </div>
+  <button type="submit">Login</button>
+</form>
+    <span id="loginError" style="color:red;font-size:0.9rem;margin-top:10px;display:none;">Invalid credentials</span>
+  </div>
+</div>
+
+<section id="draftSection" style="display:none;margin-top:2rem;">
+  <h3>📁 Draft Books (Admin)</h3>
+  <div id="draftList"></div>
+</section>
+
+<body>
+  <aside class="sidebar" id="sidebar">
+<div class="logo-section">
+  <h2 class="sidebar-logo-text">Smart Study</h2>
+  <i class='bx bx-menu' id="toggleSidebar" style="cursor:pointer;font-size:24px;margin-left:auto;"></i>
+</div>
+    <nav>
+<a href="#" data-cat="NCERT" class="active" data-tooltip="NCERT Books">
+  <i class='bx bx-book'></i><span>NCERT Books</span>
+</a>
+<a href="#" data-cat="StateBoard" data-tooltip="State Board Books">
+  <i class='bx bx-library'></i><span>State Board Books</span>
+</a>
+<a href="#" data-cat="Comics" data-tooltip="Comics">
+  <i class='bx bx-mask'></i><span>Comics</span>
+</a>
+<a href="#" data-cat="Story" data-tooltip="Story Books">
+  <i class='bx bx-book-open'></i><span>Story Books</span>
+</a>
+<a href="#" data-cat="GK" data-tooltip="GK & Competitive">
+  <i class='bx bx-brain'></i><span>GK & Competitive</span>
+</a>
+<a href="#" id="myDown" data-tooltip="My Downloads">
+  <i class='bx bx-download'></i><span>My Downloads</span>
+</a>
+<a href="admin/upload.html" target="_blank" id="uploadLink" data-tooltip="Upload">
+  <i class='bx bx-cloud-upload'></i><span>Upload</span>
+</a>
+      
+    </nav>
+  </aside>
+
+  <main class="main">
+<header class="top-bar">
+  <div class="top-bar-container">
+    <div class="search-wrapper" id="searchWrapper">
+      <button class="search-icon-btn" id="searchIconBtn">
+        <i class='bx bx-search'></i>
+      </button>
+      <div class="search-box-container" id="searchBoxContainer">
+        <input type="text" id="bookSearch" placeholder="">
+        <i class='bx bx-x' id="closeSearch"></i>
+      </div>
+    </div>
+
+<div class="header-brand">
+  <img src="logo/top-bar-logo.png" alt="Smart Study Logo" class="top-bar-logo">
+  <h1 class="gradient-text">Smart Study</h1>
+  <img src="logo/logo.png" alt="Smart Study Logo" class="logo">
+  <button id="logoutBtn" class="logout-btn" style="display:none;">Logout</button>
+</div>
+    
+<div class="header-actions">
+  <select id="boardSelect">
+    <option value="NCERT">NCERT</option>
+    <option value="CBSE">CBSE</option>
+    <option value="ICSE">ICSE</option>
+    <option value="UP">UP Board</option>
+    <option value="Bihar">Bihar Board</option>
+  </select>
+  <button id="signInBtn" class="btn-signin">Sign In</button>
+</div>
+  </div>
+</header>
+
+    <div class="scroll-content">
+      <section class="class-selector" id="classSelector">
+        <button data-class="all">All Books</button>
+        <button data-class="preschool" class="active">Pre-School</button>
+        <button data-class="1">Class 1</button>
+        <button data-class="2">Class 2</button>
+        <button data-class="3">Class 3</button>
+        <button data-class="4">Class 4</button>
+        <button data-class="5">Class 5</button>
+        <button data-class="6">Class 6</button>
+        <button data-class="7">Class 7</button>
+        <button data-class="8">Class 8</button>
+        <button data-class="9">Class 9</button>
+        <button data-class="10">Class 10</button>
+        <button data-class="11">Class 11</button>
+        <button data-class="12">Class 12</button>
+      </section>
+
+      <section class="subject-filter" id="subjectFilter"></section>
+
+      <section class="book-grid" id="bookGrid"></section>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

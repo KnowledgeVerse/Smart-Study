@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Study Library</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+</head>
+
+<!-- Glass Sign-In Modal -->
+<div id="loginModal" class="login-modal">
+  <div class="login-box">
+    <h2>Sign In</h2>
+<form id="loginForm">
+  <input type="text" id="loginUser" placeholder="Username" required />
+  <div style="position:relative;">
+    <input type="password" id="loginPass" placeholder="Password" required />
+    <i class='bx bx-show-alt show-pass' id="togglePass" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:#ccc;"></i>
+  </div>
+  <button type="submit">Login</button>
+</form>
+    <span id="loginError" style="color:red;font-size:0.9rem;margin-top:10px;display:none;">Invalid credentials</span>
+  </div>
+</div>
+
+<section id="draftSection" style="display:none;margin-top:2rem;">
+  <h3>📁 Draft Books (Admin)</h3>
+  <div id="draftList"></div>
+</section>
+
+<body>
+
+  <main class="main">
+
+<header class="top-bar">
+  <div class="top-bar-container">
+    <!-- Left Section: Logo + Dropdown -->
+    <div class="header-left">
+      <div class="logo-dropdown">
+        <img src="logo/top-bar-logo.png" alt="Smart Study Logo" class="top-bar-logo" id="mainLogo">
+        <i class='bx bx-chevron-down dropdown-arrow' id="dropdownArrow"></i>
+      </div>
+      
+      
+<div class="dropdown-menu" id="dropdownMenu">
+  <!-- National Board with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'national-submenu')">
+      <i class='bx bx-book'></i> National Board
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="national-submenu">
+      <a href="#" data-cat="NCERT" class="dropdown-item">
+        <i class='bx bx-book-bookmark'></i> NCERT
+      </a>
+      <a href="#" data-cat="CBSE" class="dropdown-item">
+        <i class='bx bx-book-content'></i> CBSE
+      </a>
+      <a href="#" data-cat="ICSE" class="dropdown-item">
+        <i class='bx bx-book-heart'></i> ICSE / ISC
+      </a>
+    </div>
+  </div>
+
+  <!-- State Board with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'state-submenu')">
+      <i class='bx bx-library'></i> State Board
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="state-submenu">
+      <a href="#" data-cat="Bihar" class="dropdown-item">
+        <i class='bx bx-map'></i> Bihar Board
+      </a>
+      <a href="#" data-cat="UP" class="dropdown-item">
+        <i class='bx bx-map-alt'></i> UP Board
+      </a>
+      <a href="#" data-cat="MP" class="dropdown-item">
+        <i class='bx bx-map-pin'></i> MP Board
+      </a>
+    </div>
+  </div>
+
+  <!-- Comics with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'comics-submenu')">
+      <i class='bx bx-mask'></i> Comics
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="comics-submenu">
+      <a href="#" data-cat="KidsComics" class="dropdown-item">
+        <i class='bx bx-child'></i> Kids Comics
+      </a>
+      <a href="#" data-cat="IndianClassics" class="dropdown-item">
+        <i class='bx bx-temple'></i> Indian Classics
+      </a>
+      <a href="#" data-cat="International" class="dropdown-item">
+        <i class='bx bx-globe'></i> International Comics
+      </a>
+      <a href="#" data-cat="Learning" class="dropdown-item">
+        <i class='bx bx-brain'></i> Learning Comics
+      </a>
+    </div>
+  </div>
+
+  <!-- Story Books with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'stories-submenu')">
+      <i class='bx bx-book-open'></i> Story Books
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="stories-submenu">
+      <a href="#" data-cat="KidsStories" class="dropdown-item">
+        <i class='bx bx-baby'></i> Kids Stories
+      </a>
+      <a href="#" data-cat="MoralStories" class="dropdown-item">
+        <i class='bx bx-heart'></i> Moral Stories
+      </a>
+      <a href="#" data-cat="FolkTales" class="dropdown-item">
+        <i class='bx bx-home-heart'></i> Folk Tales
+      </a>
+      <a href="#" data-cat="ClassicStories" class="dropdown-item">
+        <i class='bx bx-book-reader'></i> Classic Stories
+      </a>
+      <a href="#" data-cat="ShortStories" class="dropdown-item">
+        <i class='bx bx-bookmark'></i> Short Stories
+      </a>
+    </div>
+  </div>
+
+  <!-- GK & Competitive with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'gk-submenu')">
+      <i class='bx bx-brain'></i> GK & Competitive
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="gk-submenu">
+      <a href="#" data-cat="GK" class="dropdown-item">
+        <i class='bx bx-lightbulb'></i> GK
+      </a>
+      <a href="#" data-cat="Competitive" class="dropdown-item">
+        <i class='bx bx-target-lock'></i> Competitive Exams
+      </a>
+      <a href="#" data-cat="SchoolLevel" class="dropdown-item">
+        <i class='bx bx-school'></i> School Level
+      </a>
+    </div>
+  </div>
+
+  <!-- My Downloads -->
+  <a href="#" id="myDownDropdown" class="dropdown-item">
+    <i class='bx bx-download'></i> My Downloads
+  </a>
+
+  <!-- Admin Section -->
+  
+  <div class="admin-only" style="display:none;">
+  <hr style="margin: 8px 0; border: none; height: 1px; background: rgba(0, 0, 0, 0.1);">
+  
+  <div class="dropdown-item" onclick="openUploadPage()" style="cursor: pointer;">
+    <i class='bx bx-cloud-upload'></i> Upload
+  </div>
+  
+  <div class="dropdown-item" onclick="openDraftUploadPage()" style="cursor: pointer;">
+    <i class='bx bx-folder-open'></i> Draft Upload
+  </div>
+</div>
+
+
+
+</div>
+
+
+    </div>
+
+    <!-- Center Section: Branding -->
+    <div class="header-brand">
+      <img src="logo/top-bar-logo.png" alt="Smart Study Logo" class="top-bar-logo">
+      <h1 class="gradient-text">Smart Study</h1>
+      <img src="logo/logo.png" alt="Smart Study Logo" class="logo">
+    </div>
+
+    <!-- Right Section: Search + Actions -->
+    <div class="header-right">
+      <div class="search-wrapper" id="searchWrapper">
+        <button class="search-icon-btn" id="searchIconBtn">
+          <i class='bx bx-search'></i>
+        </button>
+        <div class="search-box-container" id="searchBoxContainer">
+          <input type="text" id="bookSearch" placeholder="">
+          <i class='bx bx-x' id="closeSearch"></i>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <select id="boardSelect">
+          <option value="NCERT">NCERT</option>
+          <option value="CBSE">CBSE</option>
+          <option value="ICSE">ICSE</option>
+          <option value="UP">UP Board</option>
+          <option value="Bihar">Bihar Board</option>
+        </select>
+        <button id="signInBtn" class="btn-signin">Sign In</button>
+        <div class="signed-in-badge" id="signedInBadge" style="display:none;">
+          <span class="green-tick">✓</span>
+          <span class="glowing-text">Signed In</span>
+          <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header> 
+
+    <div class="scroll-content">
+      <section class="class-selector" id="classSelector">
+        <button data-class="all">All Books</button>
+        <button data-class="preschool" class="active">Pre-School</button>
+        <button data-class="1">Class 1</button>
+        <button data-class="2">Class 2</button>
+        <button data-class="3">Class 3</button>
+        <button data-class="4">Class 4</button>
+        <button data-class="5">Class 5</button>
+        <button data-class="6">Class 6</button>
+        <button data-class="7">Class 7</button>
+        <button data-class="8">Class 8</button>
+        <button data-class="9">Class 9</button>
+        <button data-class="10">Class 10</button>
+        <button data-class="11">Class 11</button>
+        <button data-class="12">Class 12</button>
+      </section>
+
+      <section class="subject-filter" id="subjectFilter"></section>
+
+      <section class="book-grid" id="bookGrid"></section>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
