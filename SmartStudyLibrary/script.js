@@ -14,6 +14,23 @@ const mainLogo = document.getElementById("mainLogo");
 const dropdownArrow = document.getElementById("dropdownArrow");
 const dropdownMenu = document.getElementById("dropdownMenu");
 
+// NEW: User Menu Elements
+const userMenuContainer = document.getElementById("userMenuContainer");
+const userProfileIcon = document.getElementById("userProfileIcon");
+const userDropdownMenu = document.getElementById("userDropdownMenu");
+
+const darkModeToggle = document.getElementById("darkModeToggle");
+const backToTopBtn = document.getElementById("backToTopBtn");
+const contactForm = document.getElementById("contactForm");
+
+// NEW: About & Contact Modals
+const aboutModal = document.getElementById("aboutModal");
+const contactModal = document.getElementById("contactModal");
+const closeAboutModal = document.getElementById("closeAboutModal");
+const closeContactModal = document.getElementById("closeContactModal");
+
+const API_BASE_URL = "http://127.0.0.1:3000";
+
 let selectedClass = "preschool";
 let selectedBoard = "NCERT";
 let selectedSubject = "all";
@@ -74,11 +91,29 @@ document.addEventListener("click", (e) => {
 });
 
 // Logo and arrow click handlers
-if (mainLogo) {
-  mainLogo.addEventListener("click", toggleDropdown);
+const logoDropdown = document.querySelector(".logo-dropdown");
+if (logoDropdown) {
+  logoDropdown.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleDropdown();
+  });
 }
-if (dropdownArrow) {
-  dropdownArrow.addEventListener("click", toggleDropdown);
+
+// User Menu Toggle (Clicking the Logo)
+if (userProfileIcon && userDropdownMenu) {
+  userProfileIcon.addEventListener("click", (e) => {
+    e.stopPropagation();
+    userDropdownMenu.classList.toggle("active");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (
+      !userProfileIcon.contains(e.target) &&
+      !userDropdownMenu.contains(e.target)
+    ) {
+      userDropdownMenu.classList.remove("active");
+    }
+  });
 }
 
 // Handle category selection from dropdown
@@ -116,6 +151,92 @@ document.querySelectorAll(".dropdown-item").forEach((item) => {
     }
   });
 });
+
+/* ========== DARK MODE TOGGLE ========== */
+if (darkModeToggle) {
+  // Check local storage
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    darkModeToggle.checked = true;
+  }
+
+  darkModeToggle.addEventListener("change", () => {
+    if (darkModeToggle.checked) {
+      document.body.classList.add("dark-mode");
+      localStorage.setItem("darkMode", "enabled");
+    } else {
+      document.body.classList.remove("dark-mode");
+      localStorage.setItem("darkMode", "disabled");
+    }
+  });
+}
+
+/* ========== BACK TO TOP ========== */
+if (backToTopBtn) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.add("show");
+    } else {
+      backToTopBtn.classList.remove("show");
+    }
+  });
+
+  backToTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
+
+/* ========== ABOUT & CONTACT MODALS ========== */
+const menuAbout = document.getElementById("menuAbout");
+const menuContact = document.getElementById("menuContact");
+
+if (menuAbout && aboutModal) {
+  menuAbout.addEventListener("click", (e) => {
+    e.preventDefault();
+    aboutModal.style.display = "flex";
+    if (userDropdownMenu) userDropdownMenu.classList.remove("active");
+  });
+}
+
+if (closeAboutModal) {
+  closeAboutModal.addEventListener("click", () => {
+    aboutModal.style.display = "none";
+  });
+}
+
+if (menuContact && contactModal) {
+  menuContact.addEventListener("click", (e) => {
+    e.preventDefault();
+    contactModal.style.display = "flex";
+    if (userDropdownMenu) userDropdownMenu.classList.remove("active");
+  });
+}
+
+if (closeContactModal) {
+  closeContactModal.addEventListener("click", () => {
+    contactModal.style.display = "none";
+  });
+}
+
+// Close modals on outside click
+window.addEventListener("click", (e) => {
+  if (e.target === aboutModal) aboutModal.style.display = "none";
+  if (e.target === contactModal) contactModal.style.display = "none";
+  if (e.target === loginModal) loginModal.style.display = "none";
+});
+
+/* ========== CONTACT FORM ========== */
+if (contactForm) {
+  contactForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("contactName").value;
+    alert(`Thank you, ${name}! Your message has been sent successfully.`);
+    contactForm.reset();
+    if (contactModal) {
+      contactModal.style.display = "none";
+    }
+  });
+}
 
 /* ========== INITIAL LOAD ========== */
 window.addEventListener("DOMContentLoaded", () => {
@@ -171,8 +292,8 @@ async function checkPdfExists(pdfPath) {
 }
 
 function updateBackground(cls) {
-  const bgUrl = scientificBackgrounds[cls] || scientificBackgrounds["default"];
-  document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${bgUrl}')`;
+  // Clean background requested - removing image logic
+  document.body.style.backgroundImage = "";
 }
 
 async function renderBooks(list) {
@@ -221,10 +342,11 @@ async function renderBooks(list) {
       </div>`;
     bookGrid.appendChild(card);
   }
-  if (isAdmin) attachAdminListeners();
 }
 
 async function loadBooks() {
+  bookGrid.innerHTML =
+    '<div class="spinner-wrapper"><div class="loading-spinner"></div></div>';
   try {
     const res = await fetch("data/books.json");
     if (!res.ok) throw new Error("JSON file not found");
@@ -324,8 +446,11 @@ function addNewBook(newBook) {
 }
 
 /* ========== AUTH (ONLY SIGN-IN) ========== */
-const signInBtn = document.getElementById("signInBtn");
-const logoutBtn = document.getElementById("logoutBtn");
+// Replaced signInBtn with menuSignIn
+const menuSignIn = document.getElementById("menuSignIn");
+// Replaced logoutBtn with menuLogout
+const menuLogout = document.getElementById("menuLogout");
+
 const loginModal = document.getElementById("loginModal");
 const loginForm = document.getElementById("loginForm");
 const loginError = document.getElementById("loginError");
@@ -334,9 +459,11 @@ const closeLoginModal = document.getElementById("closeLoginModal");
 const VALID_USER = "admin";
 const VALID_PASS = "Kamal@007";
 
-signInBtn.addEventListener("click", () => {
-  loginModal.style.display = "flex";
-});
+if (menuSignIn) {
+  menuSignIn.addEventListener("click", () => {
+    loginModal.style.display = "flex";
+  });
+}
 
 if (closeLoginModal) {
   closeLoginModal.addEventListener("click", () => {
@@ -357,18 +484,25 @@ loginForm.addEventListener("submit", (e) => {
   }
 });
 
-logoutBtn.addEventListener("click", () => {
-  localStorage.removeItem("isSignedIn");
-  location.reload();
-});
+if (menuLogout) {
+  menuLogout.addEventListener("click", () => {
+    localStorage.removeItem("isSignedIn");
+    location.reload();
+  });
+}
 
 function showSignedInUI() {
-  signInBtn.style.display = "none";
-  document.getElementById("signedInBadge").style.display = "flex";
+  // Add green ring class
+  if (userMenuContainer) userMenuContainer.classList.add("logged-in");
+
+  // Toggle Menu Items
+  if (menuSignIn) menuSignIn.style.display = "none";
+  document.getElementById("loggedInOptions").style.display = "block";
+  document.getElementById("menuUserHeader").style.display = "block";
+  document.getElementById("logoutOptionWrapper").style.display = "block";
 
   // Show admin options in dropdown
   document.querySelector(".admin-only").style.display = "block";
-
   isAdmin = true;
   // REMOVED: Separate draft section loading
 }
@@ -378,52 +512,231 @@ function initAuth() {
 }
 
 /* ========== ADMIN CONTROLS ========== */
-function attachAdminListeners() {
-  document.querySelectorAll(".btnChangeCover").forEach((btn) =>
-    btn.addEventListener("click", (e) => {
-      const id = e.target.dataset.id;
-      const fileInput = document.querySelector(
-        `.newCoverFile[data-id="${id}"]`
-      );
-      fileInput.onchange = async (ev) => {
-        const file = ev.target.files[0];
-        if (!file) return;
-        const formData = new FormData();
-        formData.append("newCover", file);
-        const res = await fetch(
-          `http://localhost:3000/admin/book/${id}/cover`,
-          {
-            method: "POST",
-            body: formData,
-            headers: { "x-auth-token": "admin-token-007" },
-          }
-        );
-        const result = await res.json();
-        if (result.success) {
-          alert("Cover updated");
-          location.reload();
-        } else alert("Failed: " + result.error);
-      };
-      fileInput.click();
-    })
-  );
+// Event delegation for better performance and reliability
+bookGrid.addEventListener("click", async (e) => {
+  const target = e.target;
 
-  document.querySelectorAll(".btnDelete").forEach((btn) =>
-    btn.addEventListener("click", async (e) => {
-      const id = e.target.dataset.id;
-      if (!confirm("Sure to delete?")) return;
-      const res = await fetch(`http://localhost:3000/admin/book/${id}`, {
+  // Handle Change Cover
+  if (target.classList.contains("btnChangeCover")) {
+    const id = target.dataset.id;
+    const card = target.closest(".book-card");
+    const fileInput = card.querySelector(".newCoverFile");
+
+    // Create progress bar if needed
+    let progressContainer = card.querySelector(".upload-progress-container");
+    let progressBar = card.querySelector(".upload-progress-bar");
+    if (!progressContainer) {
+      progressContainer = document.createElement("div");
+      progressContainer.className = "upload-progress-container";
+      progressBar = document.createElement("div");
+      progressBar.className = "upload-progress-bar";
+      progressContainer.appendChild(progressBar);
+      card.querySelector(".admin-controls").appendChild(progressContainer);
+    }
+
+    // Create Preview Container if needed
+    let previewContainer = card.querySelector(".cover-preview-container");
+    if (!previewContainer) {
+      previewContainer = document.createElement("div");
+      previewContainer.className = "cover-preview-container";
+      previewContainer.innerHTML = `
+        <img class="cover-preview-img" src="" alt="Preview">
+        <div class="preview-actions">
+          <button class="btn-confirm-upload">Upload</button>
+          <button class="btn-cancel-upload">Cancel</button>
+        </div>
+      `;
+      // Insert before progress container
+      card
+        .querySelector(".admin-controls")
+        .insertBefore(previewContainer, progressContainer);
+    }
+    const previewImg = previewContainer.querySelector(".cover-preview-img");
+    const confirmBtn = previewContainer.querySelector(".btn-confirm-upload");
+    const cancelBtn = previewContainer.querySelector(".btn-cancel-upload");
+
+    // Create Drop Zone if needed
+    let dropZone = card.querySelector(".cover-drop-zone");
+    if (!dropZone) {
+      dropZone = document.createElement("div");
+      dropZone.className = "cover-drop-zone";
+      dropZone.style.display = "none";
+      dropZone.innerHTML =
+        "<i class='bx bx-cloud-upload'></i><span>Drag & Drop or Click</span>";
+      // Insert before preview container
+      card
+        .querySelector(".admin-controls")
+        .insertBefore(dropZone, previewContainer);
+    }
+
+    const uploadFile = (file) => {
+      if (!file) return;
+
+      // Hide drop zone
+      previewContainer.style.display = "none";
+      dropZone.style.display = "none";
+
+      const originalText = target.textContent;
+      target.textContent = "Uploading...";
+      target.disabled = true;
+
+      progressContainer.style.display = "block";
+      progressBar.style.width = "0%";
+
+      const formData = new FormData();
+      formData.append("newCover", file);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `${API_BASE_URL}/admin/book/${id}/cover`, true);
+      xhr.setRequestHeader("x-auth-token", "admin-token-007");
+
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+          const percent = (e.loaded / e.total) * 100;
+          progressBar.style.width = percent + "%";
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          try {
+            const result = JSON.parse(xhr.responseText);
+            if (result.success) {
+              const img = card.querySelector("img");
+              if (img) img.src = `${result.cover}?t=${Date.now()}`;
+              target.textContent = "Done!";
+            } else {
+              alert("Failed: " + result.error);
+              target.textContent = originalText;
+            }
+          } catch (e) {
+            console.error(e);
+            target.textContent = originalText;
+          }
+        } else {
+          alert("Upload failed");
+          target.textContent = originalText;
+        }
+        setTimeout(() => {
+          target.textContent = originalText;
+          target.disabled = false;
+          progressContainer.style.display = "none";
+          progressBar.style.width = "0%";
+          fileInput.value = "";
+        }, 1500);
+      };
+
+      xhr.onerror = () => {
+        alert("Network Error");
+        target.textContent = originalText;
+        target.disabled = false;
+        progressContainer.style.display = "none";
+      };
+
+      xhr.send(formData);
+    };
+
+    // Define File Selection Handler
+    const handleFileSelection = (file) => {
+      if (!file) return;
+      // Store file on the container to access it in confirm handler
+      previewContainer.fileObject = file;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImg.src = e.target.result;
+        previewContainer.style.display = "block";
+        dropZone.style.display = "none";
+      };
+      reader.readAsDataURL(file);
+    };
+
+    // Update Event Handlers (using properties to overwrite previous ones)
+    dropZone.onclick = () => fileInput.click();
+
+    dropZone.ondragover = (e) => {
+      e.preventDefault();
+      dropZone.classList.add("dragover");
+    };
+
+    dropZone.ondragleave = (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+    };
+
+    dropZone.ondrop = (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        handleFileSelection(e.dataTransfer.files[0]);
+      }
+    };
+
+    fileInput.onchange = (ev) => {
+      handleFileSelection(ev.target.files[0]);
+    };
+
+    confirmBtn.onclick = () => {
+      if (previewContainer.fileObject) {
+        uploadFile(previewContainer.fileObject);
+      }
+    };
+
+    cancelBtn.onclick = () => {
+      previewContainer.style.display = "none";
+      previewContainer.fileObject = null;
+      fileInput.value = "";
+      dropZone.style.display = "flex"; // Show drop zone again
+    };
+
+    // Toggle Drop Zone Visibility
+    if (previewContainer.style.display === "block") {
+      previewContainer.style.display = "none";
+    } else if (dropZone.style.display === "flex") {
+      dropZone.style.display = "none";
+    } else {
+      dropZone.style.display = "flex";
+    }
+  }
+
+  // Handle Delete
+  if (target.classList.contains("btnDelete")) {
+    const id = target.dataset.id;
+    if (!confirm("Sure to delete?")) return;
+
+    const originalText = target.textContent;
+    target.textContent = "Deleting...";
+    target.disabled = true;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/book/${id}`, {
         method: "DELETE",
         headers: { "x-auth-token": "admin-token-007" },
       });
       const result = await res.json();
       if (result.success) {
-        alert("Deleted");
-        location.reload();
-      } else alert("Failed");
-    })
-  );
-}
+        // Remove card immediately
+        const card = target.closest(".book-card");
+        if (card) {
+          card.style.transition = "all 0.3s ease";
+          card.style.opacity = "0";
+          card.style.transform = "scale(0.9)";
+          setTimeout(() => card.remove(), 300);
+        }
+      } else {
+        alert("Failed");
+        target.textContent = originalText;
+        target.disabled = false;
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error connecting to server");
+      target.textContent = originalText;
+      target.disabled = false;
+    }
+  }
+});
 
 /* ========== DRAFT MANAGER (ADMIN) - NOW ONLY FOR DROPDOWN ========== */
 async function loadDrafts() {
@@ -442,7 +755,7 @@ async function finalizeDraft(id) {
     .querySelector(`.draftName[data-id="${id}"]`)
     .value.trim();
   if (!board || !cls || !subject || !name) return alert("All fields required");
-  const res = await fetch(`http://localhost:3000/admin/draft-finalize/${id}`, {
+  const res = await fetch(`${API_BASE_URL}/admin/draft-finalize/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -458,7 +771,7 @@ async function finalizeDraft(id) {
 
 async function deleteDraft(id) {
   if (!confirm("Delete draft?")) return;
-  const res = await fetch(`http://localhost:3000/admin/draft/${id}`, {
+  const res = await fetch(`${API_BASE_URL}/admin/draft/${id}`, {
     method: "DELETE",
     headers: { "x-auth-token": "admin-token-007" },
   });

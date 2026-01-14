@@ -9,6 +9,10 @@
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
   </head>
 
   <!-- Glass Sign-In Modal -->
@@ -45,6 +49,47 @@
         style="color: red; font-size: 0.9rem; margin-top: 10px; display: none"
         >Invalid credentials</span
       >
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div id="aboutModal" class="login-modal">
+    <div class="login-box" style="width: 500px; max-width: 90%">
+      <i class="bx bx-x" id="closeAboutModal"></i>
+      <h2>About Smart Study</h2>
+      <p style="color: #fff; line-height: 1.6; text-align: center">
+        Smart Study offers comprehensive learning resources for
+        <strong>National Boards (NCERT, CBSE, ICSE)</strong> and
+        <strong>State Boards (Bihar, UP, MP)</strong>, along with
+        <strong>Comics, Story Books, and GK & Competitive</strong> sections.
+        This platform is designed to help students study smarter, explore
+        knowledge deeply, and prepare effectively for exams on one smart,
+        simple, and easy-to-use platform.
+      </p>
+    </div>
+  </div>
+
+  <!-- Contact Modal -->
+  <div id="contactModal" class="login-modal">
+    <div class="login-box" style="width: 400px; max-width: 90%">
+      <i class="bx bx-x" id="closeContactModal"></i>
+      <h2>Contact Us</h2>
+      <form id="contactForm">
+        <input type="text" id="contactName" placeholder="Your Name" required />
+        <input
+          type="email"
+          id="contactEmail"
+          placeholder="Your Email"
+          required
+        />
+        <textarea
+          id="contactMessage"
+          placeholder="Your Message"
+          rows="5"
+          required
+        ></textarea>
+        <button type="submit">Send Message</button>
+      </form>
     </div>
   </div>
 
@@ -252,15 +297,64 @@
           <!-- Right Section: Search + Actions -->
           <div class="header-right">
             <div class="header-actions">
-              <button id="signInBtn" class="btn-signin">Sign In</button>
-              <div
-                class="signed-in-badge"
-                id="signedInBadge"
-                style="display: none"
-              >
-                <span class="green-tick">✓</span>
-                <span class="glowing-text">Signed In</span>
-                <button id="logoutBtn" class="logout-btn">Logout</button>
+              <!-- Unified User Menu Trigger -->
+              <div class="user-menu-container" id="userMenuContainer">
+                <div class="user-profile-icon" id="userProfileIcon">
+                  <img src="logo/logo.png" alt="User" class="nav-user-logo" />
+                </div>
+
+                <!-- Dropdown Menu -->
+                <div class="profile-menu" id="userDropdownMenu">
+                  <!-- Header for logged in user -->
+                  <div
+                    class="profile-menu-header"
+                    id="menuUserHeader"
+                    style="display: none"
+                  >
+                    <p>Admin User</p>
+                    <span>admin@smartstudy.com</span>
+                    <hr />
+                  </div>
+
+                  <!-- Sign In Option (Visible when logged out) -->
+                  <a href="#" class="profile-menu-item" id="menuSignIn">
+                    <i class="bx bx-log-in-circle"></i> Sign In
+                  </a>
+
+                  <!-- Logged In Options (Hidden by default) -->
+                  <div id="loggedInOptions" style="display: none">
+                    <a href="#" class="profile-menu-item"
+                      ><i class="bx bx-user"></i> Profile</a
+                    >
+                    <a href="#" class="profile-menu-item"
+                      ><i class="bx bx-cog"></i> Settings</a
+                    >
+                  </div>
+
+                  <!-- Common Options -->
+                  <a href="#" class="profile-menu-item" id="menuAbout"
+                    ><i class="bx bx-info-circle"></i> About Smart Study</a
+                  >
+                  <a href="#" class="profile-menu-item" id="menuContact"
+                    ><i class="bx bx-envelope"></i> Contact Us</a
+                  >
+
+                  <div class="profile-menu-item">
+                    <i class="bx bx-moon"></i> Dark Mode
+                    <label class="switch">
+                      <input type="checkbox" id="darkModeToggle" />
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+
+                  <!-- Logout (Visible when logged in) -->
+                  <div id="logoutOptionWrapper" style="display: none">
+                    <hr />
+                    <a href="#" class="profile-menu-item" id="menuLogout"
+                      ><i class="bx bx-log-out"></i> Logout</a
+                    >
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -289,7 +383,40 @@
 
         <section class="book-grid" id="bookGrid"></section>
       </div>
+
+      <footer>
+        <h3>Follow Me</h3>
+        <div class="social-links">
+          <a
+            href="https://www.facebook.com/lalkamal"
+            target="_blank"
+            aria-label="Facebook"
+          >
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a
+            href="https://www.instagram.com/lalkamal"
+            target="_blank"
+            aria-label="Instagram"
+          >
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a
+            href="https://twitter.com/lalkaml007"
+            target="_blank"
+            aria-label="Twitter"
+          >
+            <i class="fab fa-x-twitter"></i>
+          </a>
+        </div>
+        <p>© Lal Kamal. All Rights Reserved.</p>
+      </footer>
     </main>
+
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" title="Back to Top">
+      <i class="bx bx-up-arrow-alt"></i>
+    </button>
 
     <script src="script.js"></script>
   </body>
