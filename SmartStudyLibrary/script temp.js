@@ -1,4 +1,5 @@
 /* ========== CORE APP VARIABLES ========== */
+const boardSelect = document.getElementById("boardSelect");
 const classSelector = document.getElementById("classSelector");
 const subjectFilter = document.getElementById("subjectFilter");
 const bookGrid = document.getElementById("bookGrid");
@@ -103,6 +104,7 @@ function handleCategorySelection(category) {
 
   // Load books for selected category
   selectedBoard = category;
+  boardSelect.value = category;
   loadBooks();
 }
 
@@ -135,6 +137,11 @@ classSelector.addEventListener("click", (e) => {
   e.target.classList.add("active");
   selectedSubject = "all";
   buildSubjectFilter();
+  loadBooks();
+});
+
+boardSelect.addEventListener("change", (e) => {
+  selectedBoard = e.target.value;
   loadBooks();
 });
 
@@ -329,7 +336,6 @@ const logoutBtn = document.getElementById("logoutBtn");
 const loginModal = document.getElementById("loginModal");
 const loginForm = document.getElementById("loginForm");
 const loginError = document.getElementById("loginError");
-const closeLoginModal = document.getElementById("closeLoginModal");
 
 const VALID_USER = "admin";
 const VALID_PASS = "Kamal@007";
@@ -337,12 +343,6 @@ const VALID_PASS = "Kamal@007";
 signInBtn.addEventListener("click", () => {
   loginModal.style.display = "flex";
 });
-
-if (closeLoginModal) {
-  closeLoginModal.addEventListener("click", () => {
-    loginModal.style.display = "none";
-  });
-}
 
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -590,6 +590,7 @@ function handleCategorySelection(category) {
 
   // Update board selection
   selectedBoard = mainCategory;
+  boardSelect.value = mainCategory;
 
   // Update active states
   document.querySelectorAll(".dropdown-item").forEach((item) => {
@@ -806,4 +807,16 @@ function handleUploadError(type) {
 window.addEventListener("load", () => {
   console.log("Page loaded, initializing upload functions...");
   debugFileAccess();
+});
+
+/* ======  SIGN-IN BUTTON WORK FIX  ====== */
+document.addEventListener("DOMContentLoaded", () => {
+  const signInBtn = document.getElementById("signInBtn");
+  const loginModal = document.getElementById("loginModal");
+  if (signInBtn && loginModal) {
+    signInBtn.addEventListener(
+      "click",
+      () => (loginModal.style.display = "flex")
+    );
+  }
 });

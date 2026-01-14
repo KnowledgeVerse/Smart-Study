@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Smart Study Library</title>
   <link rel="stylesheet" href="style.css"/>
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css " rel="stylesheet"/>
 </head>
 
 <!-- Glass Sign-In Modal -->
@@ -30,69 +30,181 @@
 </section>
 
 <body>
-  <aside class="sidebar" id="sidebar">
-<div class="logo-section">
-  <h2 class="sidebar-logo-text">Smart Study</h2>
-  <i class='bx bx-menu' id="toggleSidebar" style="cursor:pointer;font-size:24px;margin-left:auto;"></i>
-</div>
-    <nav>
-<a href="#" data-cat="NCERT" class="active" data-tooltip="NCERT Books">
-  <i class='bx bx-book'></i><span>NCERT Books</span>
-</a>
-<a href="#" data-cat="StateBoard" data-tooltip="State Board Books">
-  <i class='bx bx-library'></i><span>State Board Books</span>
-</a>
-<a href="#" data-cat="Comics" data-tooltip="Comics">
-  <i class='bx bx-mask'></i><span>Comics</span>
-</a>
-<a href="#" data-cat="Story" data-tooltip="Story Books">
-  <i class='bx bx-book-open'></i><span>Story Books</span>
-</a>
-<a href="#" data-cat="GK" data-tooltip="GK & Competitive">
-  <i class='bx bx-brain'></i><span>GK & Competitive</span>
-</a>
-<a href="#" id="myDown" data-tooltip="My Downloads">
-  <i class='bx bx-download'></i><span>My Downloads</span>
-</a>
-<a href="admin/upload.html" target="_blank" id="uploadLink" data-tooltip="Upload">
-  <i class='bx bx-cloud-upload'></i><span>Upload</span>
-</a>
-      
-    </nav>
-  </aside>
 
   <main class="main">
+
 <header class="top-bar">
   <div class="top-bar-container">
-    <div class="search-wrapper" id="searchWrapper">
-      <button class="search-icon-btn" id="searchIconBtn">
-        <i class='bx bx-search'></i>
-      </button>
-      <div class="search-box-container" id="searchBoxContainer">
-        <input type="text" id="bookSearch" placeholder="">
-        <i class='bx bx-x' id="closeSearch"></i>
+    <!-- Left Section: Logo + Dropdown -->
+    <div class="header-left">
+      <div class="logo-dropdown">
+        <img src="logo/top-bar-logo.png" alt="Smart Study Logo" class="top-bar-logo" id="mainLogo">
+        <i class='bx bx-chevron-down dropdown-arrow' id="dropdownArrow"></i>
       </div>
+
+      <!--  SEARCH BAR MOVED HERE (LEFT SIDE)  -->
+      <div class="search-wrapper" id="searchWrapper">
+        <button class="search-icon-btn" id="searchIconBtn">
+          <i class='bx bx-search'></i>
+        </button>
+        <div class="search-box-container" id="searchBoxContainer">
+          <input type="text" id="bookSearch" placeholder="">
+          <i class='bx bx-x' id="closeSearch"></i>
+        </div>
+      </div>
+
+      
+<div class="dropdown-menu" id="dropdownMenu">
+  <!-- National Board with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'national-submenu')">
+      <i class='bx bx-book'></i> National Board
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="national-submenu">
+      <a href="#" data-cat="NCERT" class="dropdown-item">
+        <i class='bx bx-book-bookmark'></i> NCERT
+      </a>
+      <a href="#" data-cat="CBSE" class="dropdown-item">
+        <i class='bx bx-book-content'></i> CBSE
+      </a>
+      <a href="#" data-cat="ICSE" class="dropdown-item">
+        <i class='bx bx-book-heart'></i> ICSE / ISC
+      </a>
+    </div>
+  </div>
+
+  <!-- State Board with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'state-submenu')">
+      <i class='bx bx-library'></i> State Board
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="state-submenu">
+      <a href="#" data-cat="Bihar" class="dropdown-item">
+        <i class='bx bx-map'></i> Bihar Board
+      </a>
+      <a href="#" data-cat="UP" class="dropdown-item">
+        <i class='bx bx-map-alt'></i> UP Board
+      </a>
+      <a href="#" data-cat="MP" class="dropdown-item">
+        <i class='bx bx-map-pin'></i> MP Board
+      </a>
+    </div>
+  </div>
+
+  <!-- Comics with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'comics-submenu')">
+      <i class='bx bx-mask'></i> Comics
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="comics-submenu">
+      <a href="#" data-cat="KidsComics" class="dropdown-item">
+        <i class='bx bx-child'></i> Kids Comics
+      </a>
+      <a href="#" data-cat="IndianClassics" class="dropdown-item">
+        <i class='bx bx-temple'></i> Indian Classics
+      </a>
+      <a href="#" data-cat="International" class="dropdown-item">
+        <i class='bx bx-globe'></i> International Comics
+      </a>
+      <a href="#" data-cat="Learning" class="dropdown-item">
+        <i class='bx bx-brain'></i> Learning Comics
+      </a>
+    </div>
+  </div>
+
+  <!-- Story Books with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'stories-submenu')">
+      <i class='bx bx-book-open'></i> Story Books
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="stories-submenu">
+      <a href="#" data-cat="KidsStories" class="dropdown-item">
+        <i class='bx bx-baby'></i> Kids Stories
+      </a>
+      <a href="#" data-cat="MoralStories" class="dropdown-item">
+        <i class='bx bx-heart'></i> Moral Stories
+      </a>
+      <a href="#" data-cat="FolkTales" class="dropdown-item">
+        <i class='bx bx-home-heart'></i> Folk Tales
+      </a>
+      <a href="#" data-cat="ClassicStories" class="dropdown-item">
+        <i class='bx bx-book-reader'></i> Classic Stories
+      </a>
+      <a href="#" data-cat="ShortStories" class="dropdown-item">
+        <i class='bx bx-bookmark'></i> Short Stories
+      </a>
+    </div>
+  </div>
+
+  <!-- GK & Competitive with Subcategories -->
+  <div class="dropdown-group">
+    <div class="dropdown-item has-submenu" onclick="toggleSubmenu(event, 'gk-submenu')">
+      <i class='bx bx-brain'></i> GK & Competitive
+      <i class='bx bx-chevron-right submenu-arrow'></i>
+    </div>
+    <div class="submenu" id="gk-submenu">
+      <a href="#" data-cat="GK" class="dropdown-item">
+        <i class='bx bx-lightbulb'></i> GK
+      </a>
+      <a href="#" data-cat="Competitive" class="dropdown-item">
+        <i class='bx bx-target-lock'></i> Competitive Exams
+      </a>
+      <a href="#" data-cat="SchoolLevel" class="dropdown-item">
+        <i class='bx bx-school'></i> School Level
+      </a>
+    </div>
+  </div>
+
+  <!-- My Downloads -->
+  <a href="#" id="myDownDropdown" class="dropdown-item">
+    <i class='bx bx-download'></i> My Downloads
+  </a>
+
+  <!-- Admin Section -->
+  
+  <div class="admin-only" style="display:none;">
+  <hr style="margin: 8px 0; border: none; height: 1px; background: rgba(0, 0, 0, 0.1);">
+  
+  <div class="dropdown-item" onclick="openUploadPage()" style="cursor: pointer;">
+    <i class='bx bx-cloud-upload'></i> Upload
+  </div>
+  
+  <div class="dropdown-item" onclick="openDraftUploadPage()" style="cursor: pointer;">
+    <i class='bx bx-folder-open'></i> Draft Upload
+  </div>
+</div>
+
+
+
+</div>
+
+
     </div>
 
-<div class="header-brand">
-  <img src="logo/top-bar-logo.png" alt="Smart Study Logo" class="top-bar-logo">
-  <h1 class="gradient-text">Smart Study</h1>
-  <img src="logo/logo.png" alt="Smart Study Logo" class="logo">
-  <button id="logoutBtn" class="logout-btn" style="display:none;">Logout</button>
-</div>
-    
-<div class="header-actions">
-  <select id="boardSelect">
-    <option value="NCERT">NCERT</option>
-    <option value="CBSE">CBSE</option>
-    <option value="ICSE">ICSE</option>
-    <option value="UP">UP Board</option>
-    <option value="Bihar">Bihar Board</option>
-  </select>
-  <button id="signInBtn" class="btn-signin">Sign In</button>
-</div>
+    <!-- Center Section: Branding -->
+    <div class="header-brand">
+      <img src="logo/top-bar-logo.png" alt="Smart Study Logo" class="top-bar-logo">
+      <h1 class="gradient-text">Smart Study</h1>
+      <img src="logo/logo.png" alt="Smart Study Logo" class="logo">
+    </div>
+
+    <!-- Right Section: Actions only -->
+    <div class="header-right">
+      <div class="header-actions">
+        <button id="signInBtn" class="btn-signin">Sign In</button>
+        <div class="signed-in-badge" id="signedInBadge" style="display:none;">
+          <span class="green-tick">✓</span>
+          <span class="glowing-text">Signed In</span>
+          <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+      </div>
+    </div>
   </div>
-</header>
+</header> 
 
     <div class="scroll-content">
       <section class="class-selector" id="classSelector">
