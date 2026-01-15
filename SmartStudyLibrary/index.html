@@ -13,7 +13,11 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   </head>
+  <body>
+  <!-- Animated Background Container -->
+  <div id="theme-background"></div>
 
   <!-- Glass Sign-In Modal -->
   <div id="loginModal" class="login-modal">
@@ -93,12 +97,96 @@
     </div>
   </div>
 
+  <!-- Retry Modal -->
+  <div id="retryModal" class="login-modal" style="z-index: 2000">
+    <div class="login-box" style="width: 320px; text-align: center">
+      <i
+        class="bx bx-error-circle"
+        style="font-size: 3rem; color: #ff4d4d; margin-bottom: 10px"
+      ></i>
+      <h3 style="color: white; margin-bottom: 10px">Action Failed</h3>
+      <p id="retryMessage" style="color: #ddd; margin-bottom: 20px">
+        Something went wrong.
+      </p>
+      <div style="display: flex; gap: 10px; justify-content: center">
+        <button id="confirmRetryBtn" style="background: var(--primary)">
+          Retry
+        </button>
+        <button id="cancelRetryBtn" style="background: #555">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Book Modal -->
+  <div id="editBookModal" class="login-modal" style="z-index: 2001">
+    <div class="login-box" style="width: 400px">
+      <i class="bx bx-x" id="closeEditModal"></i>
+      <h2>Edit Book</h2>
+      <form id="editBookForm">
+        <input type="hidden" id="editBookId" />
+
+        <label style="color: white; font-size: 0.9rem">Name</label>
+        <input type="text" id="editBookName" required />
+
+        <label style="color: white; font-size: 0.9rem">Category</label>
+        <select
+          id="editBookCategory"
+          style="
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+          "
+        >
+          <!-- Options populated by JS -->
+        </select>
+
+        <label style="color: white; font-size: 0.9rem">Class</label>
+        <input type="text" id="editBookClass" required />
+
+        <label style="color: white; font-size: 0.9rem">Subject</label>
+        <input type="text" id="editBookSubject" required />
+
+        <button type="submit" style="margin-top: 15px">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bulk Edit Modal -->
+  <div id="bulkEditModal" class="login-modal" style="z-index: 2002">
+    <div class="login-box" style="width: 350px">
+      <i class="bx bx-x" id="closeBulkEditModal"></i>
+      <h2>Bulk Edit Category</h2>
+      <p style="color: #ddd; font-size: 0.9rem; margin-bottom: 15px">
+        Selected Books: <span id="bulkSelectedCount">0</span>
+      </p>
+      <form id="bulkEditForm">
+        <label style="color: white; font-size: 0.9rem">New Category</label>
+        <select
+          id="bulkEditCategory"
+          style="
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+          "
+        >
+          <!-- Options populated by JS -->
+        </select>
+        <button type="submit">Update All</button>
+      </form>
+    </div>
+  </div>
+
   <section id="draftSection" style="display: none; margin-top: 2rem">
     <h3>📁 Draft Books (Admin)</h3>
     <div id="draftList"></div>
   </section>
 
-  <body>
     <main class="main">
       <header class="top-bar">
         <div class="top-bar-container">
@@ -128,10 +216,70 @@
             </div>
 
             <div class="dropdown-menu" id="dropdownMenu">
+              <!-- Dropdown Search -->
+              <div class="dropdown-search-wrapper">
+                <i class="bx bx-search"></i>
+                <input
+                  type="text"
+                  id="categorySearch"
+                  placeholder="Filter categories..."
+                />
+              </div>
+
+              <!-- All Categories -->
+              <div
+                class="all-categories-wrapper"
+                style="display: flex; align-items: stretch"
+              >
+                <div
+                  class="dropdown-item"
+                  onclick="expandAllSubmenus(event)"
+                  style="cursor: pointer; flex: 1"
+                >
+                  <i class="bx bx-grid-alt"></i> All Categories
+                </div>
+                <div
+                  class="dropdown-item"
+                  onclick="collapseAllSubmenus(event)"
+                  style="
+                    cursor: pointer;
+                    border-left: 1px solid rgba(0, 0, 0, 0.1);
+                  "
+                  title="Collapse All"
+                >
+                  <i class="bx bx-chevron-up"></i>
+                </div>
+              </div>
+
+              <!-- Pre-School with Subcategories -->
+              <div class="dropdown-group">
+                <div
+                  class="dropdown-item category-header has-submenu"
+                  onclick="toggleSubmenu(event, 'preschool-submenu')"
+                >
+                  <i class="bx bx-baby-carriage"></i> Pre-School
+                  <i class="bx bx-chevron-right submenu-arrow"></i>
+                </div>
+                <div class="submenu" id="preschool-submenu">
+                  <a href="#" data-cat="PreNursery" class="dropdown-item"
+                    ><i class="bx bx-star"></i> Pre-Nursery</a
+                  >
+                  <a href="#" data-cat="Nursery" class="dropdown-item"
+                    ><i class="bx bx-sun"></i> Nursery</a
+                  >
+                  <a href="#" data-cat="LKG" class="dropdown-item"
+                    ><i class="bx bx-pencil"></i> LKG</a
+                  >
+                  <a href="#" data-cat="UKG" class="dropdown-item"
+                    ><i class="bx bx-book-reader"></i> UKG</a
+                  >
+                </div>
+              </div>
+
               <!-- National Board with Subcategories -->
               <div class="dropdown-group">
                 <div
-                  class="dropdown-item has-submenu"
+                  class="dropdown-item category-header has-submenu"
                   onclick="toggleSubmenu(event, 'national-submenu')"
                 >
                   <i class="bx bx-book"></i> National Board
@@ -153,7 +301,7 @@
               <!-- State Board with Subcategories -->
               <div class="dropdown-group">
                 <div
-                  class="dropdown-item has-submenu"
+                  class="dropdown-item category-header has-submenu"
                   onclick="toggleSubmenu(event, 'state-submenu')"
                 >
                   <i class="bx bx-library"></i> State Board
@@ -175,7 +323,7 @@
               <!-- Comics with Subcategories -->
               <div class="dropdown-group">
                 <div
-                  class="dropdown-item has-submenu"
+                  class="dropdown-item category-header has-submenu"
                   onclick="toggleSubmenu(event, 'comics-submenu')"
                 >
                   <i class="bx bx-mask"></i> Comics
@@ -200,7 +348,7 @@
               <!-- Story Books with Subcategories -->
               <div class="dropdown-group">
                 <div
-                  class="dropdown-item has-submenu"
+                  class="dropdown-item category-header has-submenu"
                   onclick="toggleSubmenu(event, 'stories-submenu')"
                 >
                   <i class="bx bx-book-open"></i> Story Books
@@ -228,7 +376,7 @@
               <!-- GK & Competitive with Subcategories -->
               <div class="dropdown-group">
                 <div
-                  class="dropdown-item has-submenu"
+                  class="dropdown-item category-header has-submenu"
                   onclick="toggleSubmenu(event, 'gk-submenu')"
                 >
                   <i class="bx bx-brain"></i> GK & Competitive
@@ -278,6 +426,14 @@
                   style="cursor: pointer"
                 >
                   <i class="bx bx-folder-open"></i> Draft Upload
+                </div>
+
+                <div
+                  class="dropdown-item"
+                  id="btnRescanLibMain"
+                  style="cursor: pointer"
+                >
+                  <i class="bx bx-refresh"></i> Rescan Library
                 </div>
               </div>
             </div>
@@ -382,42 +538,107 @@
         <section class="subject-filter" id="subjectFilter"></section>
 
         <section class="book-grid" id="bookGrid"></section>
+
+        <!-- Pagination Controls -->
+        <div
+          id="paginationControls"
+          class="pagination-container"
+          style="
+            display: none;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+          "
+        >
+          <button id="prevPageBtn" class="btn-pagination">
+            <i class="bx bx-chevron-left"></i> Previous
+          </button>
+          <span
+            id="pageIndicator"
+            style="
+              display: flex;
+              align-items: center;
+              font-weight: bold;
+              color: var(--text);
+            "
+            >Page 1</span
+          >
+          <button id="nextPageBtn" class="btn-pagination">
+            Next <i class="bx bx-chevron-right"></i>
+          </button>
+        </div>
       </div>
 
-      <footer>
-        <h3>Follow Me</h3>
-        <div class="social-links">
-          <a
-            href="https://www.facebook.com/lalkamal"
-            target="_blank"
-            aria-label="Facebook"
-          >
-            <i class="fab fa-facebook"></i>
-          </a>
-          <a
-            href="https://www.instagram.com/lalkamal"
-            target="_blank"
-            aria-label="Instagram"
-          >
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a
-            href="https://twitter.com/lalkaml007"
-            target="_blank"
-            aria-label="Twitter"
-          >
-            <i class="fab fa-x-twitter"></i>
-          </a>
+      <footer class="wave-footer">
+        <!-- Wave SVG -->
+        <div class="waves-container">
+          <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs>
+              <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+              <use xlink:href="#gentle-wave" x="48" y="0" fill="#7AA2F7" />
+              <use xlink:href="#gentle-wave" x="48" y="3" fill="#4A69BD" />
+              <use xlink:href="#gentle-wave" x="48" y="5" fill="#0A2540" />
+            </g>
+          </svg>
         </div>
-        <p>© Lal Kamal. All Rights Reserved.</p>
+
+        <div class="footer-content">
+          <div class="footer-top-row">
+            <div class="footer-left">
+              <button id="footerBackToTopBtn" class="footer-btn">Back to Top ↑</button>
+            </div>
+            
+            <div class="footer-right">
+              <h3>Follow Me</h3>
+              <div class="social-links">
+                <a href="https://www.facebook.com/lalkamal" target="_blank" aria-label="Facebook">
+                  <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com/lalkamal" target="_blank" aria-label="Instagram">
+                  <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://twitter.com/lalkaml007" target="_blank" aria-label="Twitter">
+                  <i class="fab fa-x-twitter"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-bottom-row">
+            <div class="visitor-counter">
+              <i class='bx bx-show'></i> Visitors: <span id="visitorCount">1012</span>
+            </div>
+            <p>© <strong>Lal Kamal</strong>. All Rights Reserved.</p>
+          </div>
+        </div>
       </footer>
     </main>
+
+    <!-- Bulk Actions Bar (Fixed Bottom) -->
+    <div id="bulkActionsBar" class="bulk-actions-bar" style="display: none">
+      <div class="bulk-info">
+        <span id="bulkCounter">0</span> books selected
+      </div>
+      <div class="bulk-buttons">
+        <button id="btnBulkEdit" class="btn-bulk-action">
+          <i class="bx bx-edit"></i> Edit Category
+        </button>
+        <button id="btnBulkCancel" class="btn-bulk-action cancel">
+          <i class="bx bx-x"></i> Cancel
+        </button>
+      </div>
+    </div>
 
     <!-- Back to Top Button -->
     <button id="backToTopBtn" title="Back to Top">
       <i class="bx bx-up-arrow-alt"></i>
     </button>
 
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
     <script src="script.js"></script>
-  </body>
 </html>

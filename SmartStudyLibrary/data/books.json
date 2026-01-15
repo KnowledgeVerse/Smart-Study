@@ -1,89 +1,64 @@
 {
   "books": [
     {
-      "id": 1,
+      "id": "books/preschool/alphabet.pdf",
       "name": "Alphabet A-Z",
       "class": "preschool",
       "subject": "Alphabet",
       "board": "NCERT",
+      "category": "Nursery",
       "cover": "https://via.placeholder.com/220x280/ffb6c1/000?text=Alphabet",
       "pdf": "books/preschool/alphabet.pdf"
     },
     {
-      "id": 2,
+      "id": "books/preschool/numbers.pdf",
       "name": "Count 1-20",
       "class": "preschool",
       "subject": "Numbers",
       "board": "NCERT",
+      "category": "Nursery",
       "cover": "https://via.placeholder.com/220x280/87ceeb/000?text=Numbers",
       "pdf": "books/preschool/numbers.pdf"
     },
     {
-      "id": 3,
+      "id": "books/national_board/ncert/class1/maths.pdf",
       "name": "Math-Magic Grade 1",
       "class": "1",
       "subject": "Maths",
       "board": "NCERT",
+      "category": "NCERT",
       "cover": "https://via.placeholder.com/220x280/ffd966/000?text=Maths+1",
-      "pdf": "books/ncert/class1/maths.pdf"
+      "pdf": "books/national_board/ncert/class1/maths.pdf"
     },
     {
-      "id": 4,
+      "id": "books/national_board/ncert/class6/science.pdf",
       "name": "Science Spark 6",
       "class": "6",
       "subject": "Science",
       "board": "NCERT",
+      "category": "NCERT",
       "cover": "https://via.placeholder.com/220x280/90ee90/000?text=Science+6",
-      "pdf": "books/ncert/class6/science.pdf"
+      "pdf": "books/national_board/ncert/class6/science.pdf"
     },
     {
-      "id": 5,
+      "id": "books/national_board/ncert/class12/physics.pdf",
       "name": "Physics Part-I 12",
       "class": "12",
       "subject": "Physics",
       "board": "NCERT",
+      "category": "NCERT",
       "cover": "https://via.placeholder.com/220x280/cdb5ff/000?text=Physics+12",
-      "pdf": "books/ncert/class12/physics.pdf"
+      "pdf": "books/national_board/ncert/class12/physics.pdf"
     },
     {
-      "id": 1768157952670,
+      "id": "books/national_board/ncert/class12/Maths/lemh1ps_merged.pdf",
       "name": "Mathematics Part 1",
       "class": "12",
       "subject": "Maths",
       "board": "NCERT",
       "category": "NCERT",
-      "cover": "books/NCERT/12/cover_1768157952578.jpg",
-      "pdf": "books/NCERT/12/lemh1ps_merged.pdf"
-    },
-    {
-      "id": 1768157987770,
-      "name": "Maths",
-      "class": "12",
-      "subject": "Maths",
-      "board": "NCERT",
-      "category": "NCERT",
-      "cover": "books/NCERT/12/cover_1768157987696.jpg",
-      "pdf": "books/NCERT/12/lemh1ps_merged.pdf"
-    },
-    {
-      "id": 1768158379073,
-      "name": "Mathematics Part 1",
-      "class": "12",
-      "subject": "Maths",
-      "board": "NCERT",
-      "category": "NCERT",
-      "cover": "books/NCERT/12/cover_1768158379020.jpg",
-      "pdf": "books/NCERT/12/lemh1ps_merged.pdf"
-    },
-    {
-      "id": 1768159072579,
-      "name": "Mathematics Part 1",
-      "class": "12",
-      "subject": "Maths",
-      "board": "NCERT",
-      "category": "NCERT",
-      "cover": "books/NCERT/12/cover_1768159072516.jpg",
-      "pdf": "books/NCERT/12/lemh1ps_merged.pdf"
+      "cover": "books/national_board/ncert/class12/Maths/cover_1768157952578.jpg",
+      "pdf": "books/national_board/ncert/class12/Maths/lemh1ps_merged.pdf"
     }
   ]
 }
